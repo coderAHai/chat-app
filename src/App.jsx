@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUserInfo } from "@/store/userSlice";
 import { useEffect, useState } from "react";
 import server from "./utils/server";
-import { User_Info_ROUTE } from "./utils/constants";
+import { USER_INFO_ROUTE } from "./utils/constants";
 
 const App = () => {
   const user = useSelector((state) => state.user.value);
@@ -14,7 +14,7 @@ const App = () => {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const response = await server.get(User_Info_ROUTE, {
+        const response = await server.get(USER_INFO_ROUTE, {
           withCredentials: true,
         });
         if (response.status === 200 && response.data.id) {
