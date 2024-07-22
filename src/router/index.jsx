@@ -4,6 +4,7 @@ import Chat from "@/pages/chat";
 import Profile from "@/pages/profile";
 import AuthRoute from "@/pages/auth/AuthRoute";
 import PrivateRoute from "@/pages/auth/PrivateRoute";
+import ProfileRoute from "@/pages/auth/ProfileRoute";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: (
+      <ProfileRoute>
+        <Profile />
+      </ProfileRoute>
+    ),
   },
   {
     path: "*",
