@@ -1,13 +1,10 @@
-import useUserStore from "@/hooks/useUserStore";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { getColor } from "@/utils/color";
 import { HOST } from "@/utils/constants";
+import { getColor } from "@/utils/color";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
-const UserInfo = () => {
-  const { user } = useUserStore();
-
+const UserInfo = ({ user }) => {
   return (
-    <div className="flex items-center gap-5 flex-1">
+    <div className="flex items-center w-full gap-3">
       <div className="relative w-12 h-12">
         <Avatar className="w-12 h-12 rounded-full overflow-hidden">
           {user.image ? (
@@ -29,7 +26,10 @@ const UserInfo = () => {
           )}
         </Avatar>
       </div>
-      <div>{user.userName}</div>
+      <div>
+        <p>{user.userName}</p>
+        <p>{user.email}</p>
+      </div>
     </div>
   );
 };

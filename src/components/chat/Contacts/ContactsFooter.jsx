@@ -1,4 +1,4 @@
-import UserInfo from "../common/UserInfo";
+import UserInfo from "@/components/common/UserInfo";
 import { FiEdit2 } from "react-icons/fi";
 import { IoIosPower } from "react-icons/io";
 import {
@@ -6,7 +6,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
+} from "@/components/ui/tooltip";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "@/hooks/useUserStore";
 import server from "@/utils/server";
@@ -14,7 +14,7 @@ import { LOGOUT_ROUTE } from "@/utils/constants";
 
 const ContactsFooter = () => {
   const navigate = useNavigate();
-  const { setUserData } = useUserStore();
+  const { user, setUserData } = useUserStore();
 
   const handleLogoutClick = async () => {
     try {
@@ -35,7 +35,7 @@ const ContactsFooter = () => {
   return (
     <div className="flex justify-between items-center absolute bottom-0 w-full h-16 px-4 bg-[#212b33]">
       <div className="flex justify-between items-center gap-3 w-full">
-        <UserInfo />
+        <UserInfo user={user} />
         <div className="flex gap-5">
           <TooltipProvider>
             <Tooltip>

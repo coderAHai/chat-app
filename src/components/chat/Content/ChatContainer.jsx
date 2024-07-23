@@ -1,6 +1,6 @@
+import ChatHeader from "./ChatHeader";
 import ChatContent from "./ChatContent";
 import ChatFooter from "./ChatFooter";
-import ChatHeader from "./ChatHeader";
 
 const ChatContainer = () => {
   return (
