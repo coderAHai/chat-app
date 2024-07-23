@@ -60,7 +60,6 @@ const Auth = () => {
           navigate("/profile");
         }
       }
-      console.log(response);
     }
   };
 
@@ -75,7 +74,6 @@ const Auth = () => {
         setUserData(response.data);
         navigate("/profile");
       }
-      console.log(response);
     }
   };
 
