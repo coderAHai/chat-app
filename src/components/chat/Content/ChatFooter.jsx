@@ -3,11 +3,17 @@ import { IoSend } from "react-icons/io5";
 import { GrAttachment } from "react-icons/gr";
 import { RiEmojiStickerLine } from "react-icons/ri";
 import EmojiPicker from "emoji-picker-react";
+import useChatStore from "@/hooks/useChatStore";
+import useUserStore from "@/hooks/useUserStore";
+import { useSocket } from "@/context/SocketContext";
 
 const ChatFooter = () => {
   const emojiRef = useRef();
   const [message, setMessage] = useState("");
   const [pickerOpen, setPickerOpen] = useState(false);
+  const { type, data } = useChatStore();
+  const { user } = useUserStore();
+  const socket = useSocket();
 
   useEffect(() => {
     function handlePickerClose(event) {
@@ -21,7 +27,18 @@ const ChatFooter = () => {
     };
   }, [emojiRef]);
 
-  // const handleMessageSend = async () => {};
+  const handleMessageSend = async () => {
+    if (type === "contact" && message !== "") {
+      socket.emit("sendMessage", {
+        sender: user.id,
+        content: message,
+        recipient: data._id,
+        messageType: "text",
+        fileUrl: undefined,
+      });
+      setMessage("");
+    }
+  };
 
   const handleEmojiClick = ({ emoji }) => {
     setMessage((message) => message + emoji);
@@ -35,7 +52,7 @@ const ChatFooter = () => {
           className="flex-1 p-5 bg-transparent rounded-md focus:border-none focus:outline-none"
           placeholder="Enter Message"
           value={message}
-          onChange={(e) => setMessage(e.target.valuje)}
+          onChange={(e) => setMessage(e.target.value)}
         />
         <button className=" text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 transition-all">
           <GrAttachment className="text-2xl" />
@@ -57,7 +74,10 @@ const ChatFooter = () => {
           </div>
         </div>
       </div>
-      <button className="flex justify-center items-center bg-[#8417ff] rounded-md border-none p-5 outline-none duration-300 transition-all hover:bg-[#741bda] focus:bg-[#741bda]">
+      <button
+        className="flex justify-center items-center bg-[#8417ff] rounded-md border-none p-5 outline-none duration-300 transition-all hover:bg-[#741bda] focus:bg-[#741bda]"
+        onClick={handleMessageSend}
+      >
         <IoSend className="text-2xl" />
       </button>
     </div>
