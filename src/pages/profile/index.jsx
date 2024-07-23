@@ -1,6 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setUserInfo } from "@/store/userSlice";
 import { useEffect, useRef, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 import { FaPlus, FaTrash } from "react-icons/fa";
@@ -16,12 +14,11 @@ import {
   UPDATE_PROFILE_ROUTE,
   DELETE_PROFILE_IMAGE_ROUTE,
 } from "@/utils/constants";
+import useUserStore from "@/hooks/useUserStore";
 
 const Profile = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user.value);
-  const setUser = (data) => dispatch(setUserInfo(data));
+  const { user, setUserData } = useUserStore();
   const [userName, setUserName] = useState("");
   const [image, setImage] = useState(null);
   const [hovered, setHovered] = useState(false);
@@ -36,7 +33,7 @@ const Profile = () => {
     if (user.image) {
       setImage(`${HOST}/${user.image}`);
     }
-  }, [dispatch, user]);
+  }, [user]);
 
   const validateProfile = () => {
     if (!userName) {
@@ -55,7 +52,7 @@ const Profile = () => {
           { withCredentials: true }
         );
         if (response.status === 200 && response.data) {
-          setUser(response.data);
+          setUserData(response.data);
           toast.success("Profile updated successfully.");
           navigate("/chat");
         }
@@ -79,7 +76,7 @@ const Profile = () => {
           withCredentials: true,
         });
         if (response.status === 200 && response.data.image) {
-          setUser({ ...user, image: response.data.image });
+          setUserData({ ...user, image: response.data.image });
           toast.success("Image updated successfully.");
         }
       }
@@ -94,7 +91,7 @@ const Profile = () => {
         withCredentials: true,
       });
       if (response.status === 200) {
-        setUser({ ...user, image: null });
+        setUserData({ ...user, image: null });
         toast.success("Image removed successfully.");
         setImage(null);
       }

@@ -1,14 +1,12 @@
 import router from "./router";
 import { RouterProvider } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { setUserInfo } from "@/store/userSlice";
 import { useEffect, useState } from "react";
 import server from "./utils/server";
 import { USER_INFO_ROUTE } from "./utils/constants";
+import useUserStore from "./hooks/useUserStore";
 
 const App = () => {
-  const user = useSelector((state) => state.user.value);
-  const dispatch = useDispatch();
+  const { user, setUserData } = useUserStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,12 +16,12 @@ const App = () => {
           withCredentials: true,
         });
         if (response.status === 200 && response.data.id) {
-          dispatch(setUserInfo(response.data));
+          setUserData(response.data);
         } else {
-          dispatch(setUserInfo(undefined));
+          setUserData(undefined);
         }
       } catch (error) {
-        dispatch(setUserInfo(undefined));
+        setUserData(undefined);
       } finally {
         setLoading(false);
       }
@@ -33,7 +31,7 @@ const App = () => {
     } else {
       setLoading(false);
     }
-  }, [dispatch, user]);
+  }, [user]);
 
   if (loading) {
     return <div>loading...</div>;

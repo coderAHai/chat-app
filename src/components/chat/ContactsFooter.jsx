@@ -14,7 +14,7 @@ import { LOGOUT_ROUTE } from "@/utils/constants";
 
 const ContactsFooter = () => {
   const navigate = useNavigate();
-  const { setUser } = useUserStore();
+  const { setUserData } = useUserStore();
 
   const handleLogoutClick = async () => {
     try {
@@ -25,7 +25,7 @@ const ContactsFooter = () => {
       );
       if (response.status === 200) {
         navigate("/auth");
-        setUser(null);
+        setUserData(null);
       }
     } catch (error) {
       console.log(error);
