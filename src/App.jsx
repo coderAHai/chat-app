@@ -1,37 +1,9 @@
+import useGetUser from "./hooks/useGetUser";
 import router from "./router";
 import { RouterProvider } from "react-router-dom";
-import { useEffect, useState } from "react";
-import server from "./utils/server";
-import { USER_INFO_ROUTE } from "./utils/constants";
-import useUserStore from "./hooks/useUserStore";
 
 const App = () => {
-  const { user, setUserData } = useUserStore();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const response = await server.get(USER_INFO_ROUTE, {
-          withCredentials: true,
-        });
-        if (response.status === 200 && response.data.id) {
-          setUserData(response.data);
-        } else {
-          setUserData(null);
-        }
-      } catch (error) {
-        setUserData(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (!user) {
-      getUserData();
-    } else {
-      setLoading(false);
-    }
-  }, [user]);
+  const { loading } = useGetUser();
 
   if (loading) {
     return <div>loading...</div>;
