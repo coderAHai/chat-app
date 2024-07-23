@@ -10,7 +10,7 @@ import { toast } from "sonner";
 const Chat = () => {
   const navigate = useNavigate();
   const { user } = useUserStore();
-  const { store } = useChatStore();
+  const { type } = useChatStore();
 
   useEffect(() => {
     if (!user.profileSetup) {
@@ -22,7 +22,7 @@ const Chat = () => {
   return (
     <div className="flex w-full h-screen text-white overflow-hidden">
       <ContactsContainer />
-      {store.type === undefined ? <EmptyContainer /> : <ChatContainer />}
+      {type === null ? <EmptyContainer /> : <ChatContainer />}
     </div>
   );
 };

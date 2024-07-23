@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { setType, setData, setMessage, close } from "@/store/chatSlice";
+import { setType, setData, setMessage, setClose } from "@/store/chatSlice";
 
 function useChatStore() {
   const store = useSelector((state) => state.chat);
@@ -7,9 +7,9 @@ function useChatStore() {
   const setChatType = (data) => dispatch(setType(data));
   const setChatData = (data) => dispatch(setData(data));
   const setChatMessage = (data) => dispatch(setMessage(data));
-  const closeChat = () => dispatch(close());
+  const setChatClose = () => dispatch(setClose());
 
-  return { store, setChatType, setChatData, setChatMessage, closeChat };
+  return { ...store, setChatType, setChatData, setChatMessage, setChatClose };
 }
 
 export default useChatStore;

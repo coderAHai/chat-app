@@ -5,8 +5,7 @@ import { HOST } from "@/utils/constants";
 import { getColor } from "@/utils/color";
 
 const ChatHeader = () => {
-  const { store, closeChat } = useChatStore();
-  const { data } = store;
+  const { data, setChatClose } = useChatStore();
 
   return (
     <div className="flex items-center w-full py-4 px-8 border-b-2 border-[#2f303b]">
@@ -41,7 +40,7 @@ const ChatHeader = () => {
         <div className="flex justify-center items-center gap-5">
           <button
             className=" text-neutral-500 border-none outline-none hover:text-white duration-300 transition-all"
-            onClick={closeChat}
+            onClick={setChatClose}
           >
             <RiCloseFill className="text-3xl" />
           </button>

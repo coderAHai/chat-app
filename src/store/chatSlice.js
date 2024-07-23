@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const chatSlice = createSlice({
   name: "chat",
   initialState: {
-    type: undefined,
-    data: undefined,
+    type: null,
+    data: null,
     message: [],
   },
   reducers: {
@@ -17,13 +17,13 @@ export const chatSlice = createSlice({
     setMessage: (state, action) => {
       state.message = action.payload;
     },
-    close: (state) => {
-      state.type = undefined;
-      state.data = undefined;
+    setClose: (state) => {
+      state.type = null;
+      state.data = null;
       state.message = [];
     },
   },
 });
 
-export const { setType, setData, setMessage, close } = chatSlice.actions;
+export const { setType, setData, setMessage, setClose } = chatSlice.actions;
 export default chatSlice.reducer;

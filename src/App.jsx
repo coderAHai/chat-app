@@ -18,10 +18,10 @@ const App = () => {
         if (response.status === 200 && response.data.id) {
           setUserData(response.data);
         } else {
-          setUserData(undefined);
+          setUserData(null);
         }
       } catch (error) {
-        setUserData(undefined);
+        setUserData(null);
       } finally {
         setLoading(false);
       }
