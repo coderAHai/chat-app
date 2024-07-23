@@ -2,9 +2,9 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import Auth from "@/pages/auth";
 import Chat from "@/pages/chat";
 import Profile from "@/pages/profile";
-import AuthRoute from "@/pages/auth/AuthRoute";
-import PrivateRoute from "@/pages/auth/PrivateRoute";
-import ProfileRoute from "@/pages/auth/ProfileRoute";
+import AuthRoute from "@/router/AuthRoute";
+import ChatRoute from "@/router/ChatRoute";
+import ProfileRoute from "@/router/ProfileRoute";
 
 const router = createBrowserRouter([
   {
@@ -18,9 +18,9 @@ const router = createBrowserRouter([
   {
     path: "/chat",
     element: (
-      <PrivateRoute>
+      <ChatRoute>
         <Chat />
-      </PrivateRoute>
+      </ChatRoute>
     ),
   },
   {

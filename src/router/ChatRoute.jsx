@@ -1,7 +1,7 @@
 import useUserStore from "@/hooks/useUserStore";
 import { Navigate } from "react-router-dom";
 
-const PrivateRoute = ({ children }) => {
+const ChatRoute = ({ children }) => {
   const { user } = useUserStore();
   if (user) {
     return user.profileSetup ? children : <Navigate to="/profile" />;
@@ -10,4 +10,4 @@ const PrivateRoute = ({ children }) => {
   }
 };
 
-export default PrivateRoute;
+export default ChatRoute;
