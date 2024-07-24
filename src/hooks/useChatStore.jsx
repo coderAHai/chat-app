@@ -6,6 +6,8 @@ import {
   setClose,
   addMessage,
   setChatContacts,
+  setChannels,
+  addChannels,
 } from "@/store/chatSlice";
 
 function useChatStore() {
@@ -17,6 +19,8 @@ function useChatStore() {
   const setChatClose = () => dispatch(setClose());
   const addChatMessage = (data) => dispatch(addMessage(data));
   const setContacts = (data) => dispatch(setChatContacts(data));
+  const setChatChannels = (data) => dispatch(setChannels(data));
+  const addChatChannels = (data) => dispatch(addChannels(data));
 
   return {
     ...store,
@@ -26,6 +30,8 @@ function useChatStore() {
     setChatClose,
     addChatMessage,
     setContacts,
+    setChatChannels,
+    addChatChannels,
   };
 }
 

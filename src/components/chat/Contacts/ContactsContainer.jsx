@@ -14,9 +14,11 @@ import server from "@/utils/server";
 import { GET_CONTACTS } from "@/utils/constants";
 import useChatStore from "@/hooks/useChatStore";
 import UserInfo from "@/components/common/UserInfo";
+import ChannelDialog from "./ChannelDialog";
 
 const ContactsContainer = () => {
   const [openDialog, setOpenDialog] = useState(false);
+  const [openChannelDialog, setOpenChannelDialog] = useState(false);
   const {
     data,
     setChatType,
@@ -94,10 +96,27 @@ const ContactsContainer = () => {
       <div className="my-5">
         <div className="flex justify-between items-center pr-10">
           <Title text="Channels" />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <FaPlus
+                  onClick={() => setOpenChannelDialog(true)}
+                  className=" text-neutral-500 font-light text-opacity-90 text-start hover:text-neutral-100 cursor-pointer transition-all duration-300"
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Create New Channel</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
       <ContactsFooter />
       <ContactsDialog openDialog={openDialog} setOpenDialog={setOpenDialog} />
+      <ChannelDialog
+        openChannelDialog={openChannelDialog}
+        setOpenChannelDialog={setOpenChannelDialog}
+      />
     </div>
   );
 };

@@ -7,6 +7,7 @@ export const chatSlice = createSlice({
     data: null,
     message: [],
     chatContacts: [],
+    channels: [],
   },
   reducers: {
     setType: (state, action) => {
@@ -21,10 +22,16 @@ export const chatSlice = createSlice({
     setChatContacts: (state, action) => {
       state.chatContacts = action.payload;
     },
+    setChannels: (state, action) => {
+      state.channels = action.payload;
+    },
     setClose: (state) => {
       state.type = null;
       state.data = null;
       state.message = [];
+    },
+    addChannels: (state, action) => {
+      state.channels = [...state.channels, action.payload];
     },
     addMessage: (state, action) => {
       const data = action.payload;
@@ -49,5 +56,7 @@ export const {
   setClose,
   addMessage,
   setChatContacts,
+  setChannels,
+  addChannels,
 } = chatSlice.actions;
 export default chatSlice.reducer;
