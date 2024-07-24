@@ -6,9 +6,12 @@ import EmojiPicker from "emoji-picker-react";
 import useChatStore from "@/hooks/useChatStore";
 import useUserStore from "@/hooks/useUserStore";
 import { useSocket } from "@/context/SocketContext";
+import server from "@/utils/server";
+import { UPLOAD_FILE_ROUTE } from "@/utils/constants";
 
 const ChatFooter = () => {
   const emojiRef = useRef();
+  const fileRef = useRef();
   const [message, setMessage] = useState("");
   const [pickerOpen, setPickerOpen] = useState(false);
   const { type, data } = useChatStore();
@@ -40,8 +43,38 @@ const ChatFooter = () => {
     }
   };
 
+  const handleUploadFile = async (event) => {
+    try {
+      const file = event.target.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        const response = await server.post(UPLOAD_FILE_ROUTE, formData, {
+          withCredentials: true,
+        });
+        if (response.data && type === "contact") {
+          socket.emit("sendMessage", {
+            sender: user.id,
+            content: undefined,
+            recipient: data._id,
+            messageType: "file",
+            fileUrl: response.data.fileUrl,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleEmojiClick = ({ emoji }) => {
     setMessage((message) => message + emoji);
+  };
+
+  const handleFileClick = () => {
+    if (fileRef.current) {
+      fileRef.current.click();
+    }
   };
 
   return (
@@ -54,9 +87,18 @@ const ChatFooter = () => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <button className=" text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 transition-all">
+        <button
+          className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 transition-all"
+          onClick={handleFileClick}
+        >
           <GrAttachment className="text-2xl" />
         </button>
+        <input
+          type="file"
+          className="hidden"
+          ref={fileRef}
+          onChange={handleUploadFile}
+        />
         <div className="relative">
           <button
             onClick={() => setPickerOpen(true)}
