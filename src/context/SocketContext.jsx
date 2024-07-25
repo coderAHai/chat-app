@@ -34,12 +34,12 @@ export const SocketProvider = ({ children }) => {
             data._id === message.recipient._id)
         ) {
           addChatMessage(message);
-          const isExist = chatContacts.some(
-            (item) => item._id === message.recipient._id
-          );
-          if (!isExist) {
-            addChatContacts(message.recipient);
-          }
+        }
+        const isExist = chatContacts.some(
+          (item) => item._id === message.recipient._id
+        );
+        if (!isExist) {
+          addChatContacts(message.recipient);
         }
       };
 
@@ -47,12 +47,12 @@ export const SocketProvider = ({ children }) => {
         const { data, type, channels } = store.getState().chat;
         if (type !== null && data._id === message.channel._id) {
           addChatMessage(message);
-          const isExist = channels.some(
-            (item) => item._id === message.channel._id
-          );
-          if (!isExist) {
-            addChatChannels(message.recipient);
-          }
+        }
+        const isExist = channels.some(
+          (item) => item._id === message.channel._id
+        );
+        if (!isExist) {
+          addChatChannels(message.channel);
         }
       };
 
