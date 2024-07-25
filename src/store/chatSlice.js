@@ -31,11 +31,13 @@ export const chatSlice = createSlice({
       state.message = [];
     },
     addChannels: (state, action) => {
-      state.channels = [...state.channels, action.payload];
+      state.channels.push(action.payload);
+    },
+    addContacts: (state, action) => {
+      state.chatContacts.push(action.payload);
     },
     addMessage: (state, action) => {
       const data = action.payload;
-      console.log(data);
       state.message = [
         ...state.message,
         {
@@ -58,5 +60,6 @@ export const {
   setChatContacts,
   setChannels,
   addChannels,
+  addContacts,
 } = chatSlice.actions;
 export default chatSlice.reducer;

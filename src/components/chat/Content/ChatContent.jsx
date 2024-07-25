@@ -1,6 +1,11 @@
 import useChatStore from "@/hooks/useChatStore";
+import useUserStore from "@/hooks/useUserStore";
 // import useUserStore from "@/hooks/useUserStore";
-import { HOST, GET_MESSAGE_ROUTE } from "@/utils/constants";
+import {
+  HOST,
+  GET_MESSAGE_ROUTE,
+  GET_CHANNEL_MESSAGE,
+} from "@/utils/constants";
 import server from "@/utils/server";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";
@@ -10,7 +15,7 @@ import { MdFolderZip } from "react-icons/md";
 
 const ChatContent = () => {
   const scrollRef = useRef();
-  // const { user } = useUserStore();
+  const { user } = useUserStore();
   const { type, data, message, setChatMessage } = useChatStore();
   const [showImage, setShowImage] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
@@ -35,8 +40,23 @@ const ChatContent = () => {
         console.log(error);
       }
     };
+
+    const getChannelMessage = async () => {
+      try {
+        const response = await server.get(
+          `${GET_CHANNEL_MESSAGE}/${data._id}`,
+          { withCredentials: true }
+        );
+        if (response.data) {
+          setChatMessage(response.data.messages);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
     if (data._id) {
       if (type === "contact") getMessages();
+      if (type === "channel") getChannelMessage();
     }
   }, [data, type]);
 
@@ -81,6 +101,7 @@ const ChatContent = () => {
             </div>
           )}
           {type === "contact" && renderDomMessage(item)}
+          {type === "channel" && renderChannelMessage(item)}
         </div>
       );
     });
@@ -134,6 +155,72 @@ const ChatContent = () => {
       </div>
     </div>
   );
+
+  const renderChannelMessage = (item) => {
+    return (
+      <div
+        className={`mt-5 ${
+          item.sender._id !== user.id ? "text-left" : "text-right"
+        }`}
+      >
+        {item.messageType === "text" && (
+          <div
+            className={`${
+              item.sender !== data._id
+                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                : "bg-[#2a2b33]/5 text-white/80 border-white/20"
+            } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+          >
+            {item.content}
+          </div>
+        )}
+        {item.messageType === "file" && (
+          <div
+            className={`${
+              item.sender._id !== data._id
+                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                : "bg-[#2a2b33]/5 text-white/80 border-white/20"
+            } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+          >
+            {checkImage(item.fileUrl) ? (
+              <div
+                className="cursor-pointer"
+                onClick={() => changeImageDialog(true, item.fileUrl)}
+              >
+                <img src={`${HOST}/${item.fileUrl}`} width={200} height={200} />
+              </div>
+            ) : (
+              <div
+                className="flex justify-center items-center gap-4 cursor-pointer"
+                onClick={() => downloadFile(item.fileUrl)}
+              >
+                <span className="text-white text-2xl bg-black/20 rounded-full p-4">
+                  <MdFolderZip />
+                </span>
+                <span className="line-clamp-1">
+                  {item.fileUrl.split("/").pop()}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+        <div className="text-xs text-gray-600">
+          {item.sender._id === user.id ? (
+            <span>{moment(item.timestamp).format("LT")}</span>
+          ) : (
+            <div className="flex items-center gap-2">
+              <img
+                className="w-6 h-6 rounded-full"
+                src={`${HOST}/${item.sender.image}`}
+              />
+              <div>{item.sender.userName}</div>
+              {moment(item.timestamp).format("LT")}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="w-full md:w-[65vw] lg:w-[70vw] xl:w-[80vw] flex-1 overflow-y-auto scrollbar-hidden p-4 px-8">

@@ -11,21 +11,24 @@ import { FaPlus } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import ContactsDialog from "./ContactsDialog";
 import server from "@/utils/server";
-import { GET_CONTACTS } from "@/utils/constants";
+import { GET_CHANNEL, GET_CONTACTS } from "@/utils/constants";
 import useChatStore from "@/hooks/useChatStore";
 import UserInfo from "@/components/common/UserInfo";
 import ChannelDialog from "./ChannelDialog";
+import ChannelInfo from "@/components/common/ChannelInfo";
 
 const ContactsContainer = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [openChannelDialog, setOpenChannelDialog] = useState(false);
   const {
     data,
+    channels,
     setChatType,
     setChatData,
     setChatMessage,
     chatContacts,
     setContacts,
+    setChatChannels,
   } = useChatStore();
 
   useEffect(() => {
@@ -42,7 +45,21 @@ const ContactsContainer = () => {
       }
     };
 
+    const getChannel = async () => {
+      try {
+        const response = await server.get(GET_CHANNEL, {
+          withCredentials: true,
+        });
+        if (response.data.channels) {
+          setChatChannels(response.data.channels);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getContacts();
+    getChannel();
   }, []);
 
   const handleSelectContacts = (contact) => {
@@ -51,6 +68,14 @@ const ContactsContainer = () => {
     }
     setChatType("contact");
     setChatData(contact);
+  };
+
+  const handleSelectChannel = (channel) => {
+    if (data && data._id !== channel) {
+      setChatMessage([]);
+    }
+    setChatType("channel");
+    setChatData(channel);
   };
 
   return (
@@ -109,6 +134,23 @@ const ContactsContainer = () => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+        </div>
+        <div className="flex flex-col gap-2 mt-5 max-h-[38vh] overflow-y-auto scrollbar-hidden">
+          {channels.map((item) => {
+            return (
+              <div
+                key={item._id}
+                className={`px-10 py-2 ${
+                  data && data._id === item._id
+                    ? " bg-purple-500 cursor-default"
+                    : "cursor-pointer"
+                }`}
+                onClick={() => handleSelectChannel(item)}
+              >
+                <ChannelInfo channel={item} />
+              </div>
+            );
+          })}
         </div>
       </div>
       <ContactsFooter />

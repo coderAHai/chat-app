@@ -39,8 +39,16 @@ const ChatFooter = () => {
         messageType: "text",
         fileUrl: undefined,
       });
-      setMessage("");
+    } else if (type === "channel" && message !== "") {
+      socket.emit("sendChannelMeesage", {
+        sender: user.id,
+        channelId: data._id,
+        content: message,
+        messageType: "text",
+        fileUrl: undefined,
+      });
     }
+    setMessage("");
   };
 
   const handleUploadFile = async (event) => {
@@ -57,6 +65,14 @@ const ChatFooter = () => {
             sender: user.id,
             content: undefined,
             recipient: data._id,
+            messageType: "file",
+            fileUrl: response.data.fileUrl,
+          });
+        } else if (response.data && type === "channel") {
+          socket.emit("sendChannelMeesage", {
+            sender: user.id,
+            channelId: data._id,
+            content: undefined,
             messageType: "file",
             fileUrl: response.data.fileUrl,
           });
