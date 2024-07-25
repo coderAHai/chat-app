@@ -1,6 +1,6 @@
 import useChatStore from "@/hooks/useChatStore";
 import useUserStore from "@/hooks/useUserStore";
-// import useUserStore from "@/hooks/useUserStore";
+import { getColor } from "@/utils/color";
 import {
   HOST,
   GET_MESSAGE_ROUTE,
@@ -209,10 +209,22 @@ const ChatContent = () => {
             <span>{moment(item.timestamp).format("LT")}</span>
           ) : (
             <div className="flex items-center gap-2">
-              <img
-                className="w-6 h-6 rounded-full"
-                src={`${HOST}/${item.sender.image}`}
-              />
+              {item.sender.image ? (
+                <img
+                  className="w-6 h-6 rounded-full"
+                  src={`${HOST}/${item.sender.image}`}
+                />
+              ) : (
+                <div
+                  className={`flex justify-center items-center w-6 h-6 uppercase border rounded-full text-center ${getColor(
+                    item.sender.color
+                  )}`}
+                >
+                  {item.sender.userName
+                    ? item.sender.userName.split("").shift()
+                    : item.sender.email.split("").shift()}
+                </div>
+              )}
               <div>{item.sender.userName}</div>
               {moment(item.timestamp).format("LT")}
             </div>
